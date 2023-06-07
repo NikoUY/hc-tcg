@@ -35,6 +35,7 @@ import PotionOfWeaknessSingleUseCard from './potion-of-weakness'
 import EggSingleUseCard from './egg'
 import EnderPearlSingleUseCard from './ender-pearl'
 import BadOmenSingleUseCard from './bad-omen'
+import PistonSingleUseCard from './piston'
 import SplashPotionOfHealingIISingleUseCard from './splash-potion-of-healing-ii'
 import LadderSingleUseCard from './ladder'
 
@@ -77,6 +78,7 @@ const SINGLE_USE_CARDS = [
 	//new EggSingleUseCard(),
 	//new EnderPearlSingleUseCard(),
 	//new BadOmenSingleUseCard(),
+	new PistonSingleUseCard(),
 	new LadderSingleUseCard(),
 	new SplashPotionOfHealingIISingleUseCard(),
 ]
