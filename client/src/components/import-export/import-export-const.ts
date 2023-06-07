@@ -132,4 +132,5 @@ export const universe = [
 	'sweeping_edge',
 	'trident',
 	'splash_potion_of_healing_ii',
+	'ladder',
 ]

@@ -36,6 +36,7 @@ import EggSingleUseCard from './egg'
 import EnderPearlSingleUseCard from './ender-pearl'
 import BadOmenSingleUseCard from './bad-omen'
 import SplashPotionOfHealingIISingleUseCard from './splash-potion-of-healing-ii'
+import LadderSingleUseCard from './ladder'
 
 const SINGLE_USE_CARDS = [
 	new InstantHealthSingleUseCard(),
@@ -76,6 +77,7 @@ const SINGLE_USE_CARDS = [
 	//new EggSingleUseCard(),
 	//new EnderPearlSingleUseCard(),
 	//new BadOmenSingleUseCard(),
+	new LadderSingleUseCard(),
 	new SplashPotionOfHealingIISingleUseCard(),
 ]
 
