@@ -234,6 +234,10 @@ export const getOpponentId = (game, playerId) => {
 	return players.filter((p) => p.playerId !== playerId)[0]?.playerId
 }
 
+export const isRemovable = (card) => {
+	return EFFECT_CARDS[card.cardId].getIsRemovable()
+}
+
 /**
  * @param {PlayerState} playerState
  * @returns {boolean}

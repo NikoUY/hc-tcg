@@ -1,5 +1,5 @@
+import {isRemovable} from '../../../../server/utils'
 import SingleUseCard from './_single-use-card'
-import {isRemovable} from '../../../../server/utils'	
 import {GameModel} from '../../../../server/models/game-model'
 
 /**
