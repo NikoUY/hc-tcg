@@ -74,7 +74,7 @@ const SINGLE_USE_CARDS = [
 	// new AnvilSingleUseCard(),
 	// new PotionOfSlownessSingleUseCard(),
 	// new PotionOfWeaknessSingleUseCard(),
-	//new TridentSingleUseCard(),
+	new TridentSingleUseCard(),
 	new SweepingEdgeSingleUseCard(),
 	//new EggSingleUseCard(),
 	//new EnderPearlSingleUseCard(),
