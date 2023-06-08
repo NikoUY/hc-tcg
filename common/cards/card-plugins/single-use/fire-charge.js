@@ -37,7 +37,7 @@ class FireChargeSingleUseCard extends SingleUseCard {
         if (slots.length !== 1) return
 
         const pickedCard = slots[0]
-		if (pickedCard.slot.card !== null) return
+		if (pickedCard.slot.card === null) return
 
         discardCard(game, pickedCard.slot.card)
 		discardSingleUse(game, player)
