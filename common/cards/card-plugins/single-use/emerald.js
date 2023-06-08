@@ -35,8 +35,9 @@ class EmeraldSingleUseCard extends SingleUseCard {
 
 		const opponentEffect = opponentActiveRow.effectCard
 		const playerEffect = playerActiveRow.effectCard
-		
-		if (isRemovable(opponentEffect) || isRemovable(playerEffect)) return 'NO'
+
+		if (!opponentEffect && !playerEffect) return 'NO'
+		if ((opponentEffect && !isRemovable(opponentEffect)) || (playerEffect && !isRemovable(playerEffect))) return 'NO'		
 
 		return 'YES'
 	}
