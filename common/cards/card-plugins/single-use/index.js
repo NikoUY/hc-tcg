@@ -77,7 +77,7 @@ const SINGLE_USE_CARDS = [
 	new TridentSingleUseCard(),
 	new SweepingEdgeSingleUseCard(),
 	//new EggSingleUseCard(),
-	//new EnderPearlSingleUseCard(),
+	new EnderPearlSingleUseCard(),
 	//new BadOmenSingleUseCard(),
 	new PistonSingleUseCard(),
 	new LadderSingleUseCard(),
