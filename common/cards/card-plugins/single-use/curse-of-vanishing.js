@@ -27,7 +27,7 @@ class CurseOfVanishingSingleUseCard extends SingleUseCard {
 	onApply(game, instance, pos, pickedSlots) {
 		const {otherPlayer} = pos
 		
-		if (!otherPlayer.board.activeRow) return
+		if (otherPlayer.board.activeRow === null) return
 		const opponentActiveRow = otherPlayer.board.rows[otherPlayer.board.activeRow]
 		if (opponentActiveRow.effectCard && isRemovable(opponentActiveRow.effectCard)) {
 			discardCard(game, opponentActiveRow.effectCard)
@@ -46,9 +46,9 @@ class CurseOfVanishingSingleUseCard extends SingleUseCard {
 		if (super.canAttach(game, pos) === 'INVALID') return 'INVALID'
 		const {otherPlayer} = pos
 
-		if (!otherPlayer.board.activeRow) return 'NO'
+		if (otherPlayer.board.activeRow === null) return 'NO'
 		const opponentActiveRow = otherPlayer.board.rows[otherPlayer.board.activeRow]
-		if (!opponentActiveRow.effectCard || !isRemovable(opponentActiveRow.effectCard)) return 'INVALID'
+		if (!opponentActiveRow.effectCard || !isRemovable(opponentActiveRow.effectCard)) return 'NO'
 
 		return 'YES'
 	}
