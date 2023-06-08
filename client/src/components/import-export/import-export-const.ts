@@ -136,4 +136,5 @@ export const universe = [
 	'splash_potion_of_healing_ii',
 	'ladder',
 	'command_block',
+	'fire_charge',
 ]

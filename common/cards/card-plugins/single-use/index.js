@@ -38,6 +38,7 @@ import BadOmenSingleUseCard from './bad-omen'
 import PistonSingleUseCard from './piston'
 import SplashPotionOfHealingIISingleUseCard from './splash-potion-of-healing-ii'
 import LadderSingleUseCard from './ladder'
+import FireChargeSingleUseCard from './fire-charge'
 
 const SINGLE_USE_CARDS = [
 	new InstantHealthSingleUseCard(),
@@ -81,6 +82,7 @@ const SINGLE_USE_CARDS = [
 	new PistonSingleUseCard(),
 	new LadderSingleUseCard(),
 	new SplashPotionOfHealingIISingleUseCard(),
+	new FireChargeSingleUseCard(),
 ]
 
 export default SINGLE_USE_CARDS
