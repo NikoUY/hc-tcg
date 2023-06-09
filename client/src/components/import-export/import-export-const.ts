@@ -137,4 +137,5 @@ export const universe = [
 	'ladder',
 	'command_block',
 	'fire_charge',
+	'chainmail_armor',
 ]

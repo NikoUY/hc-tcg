@@ -15,6 +15,7 @@ import StringEffectCard from './string'
 import TurtleShellEffectCard from './turtle-shell'
 import CommandBlockSingleUseCard from './command-block'
 import EffectCard from './_effect-card'
+import ChainmailArmorEffectCard from './chainmail-armor'
 
 /** @type {Array<EffectCard>} */
 const EFFECT_CARDS = [
@@ -34,6 +35,7 @@ const EFFECT_CARDS = [
 	// new StringEffectCard(),
 	// new TurtleShellEffectCard(),
 	new CommandBlockSingleUseCard(),
+	new ChainmailArmorEffectCard(),
 ]
 
 export default EFFECT_CARDS
