@@ -78,7 +78,7 @@ const SINGLE_USE_CARDS = [
 	new SweepingEdgeSingleUseCard(),
 	//new EggSingleUseCard(),
 	new EnderPearlSingleUseCard(),
-	//new BadOmenSingleUseCard(),
+	new BadOmenSingleUseCard(),
 	new PistonSingleUseCard(),
 	new LadderSingleUseCard(),
 	new SplashPotionOfHealingIISingleUseCard(),
