@@ -17,6 +17,7 @@ import CommandBlockSingleUseCard from './command-block'
 import EffectCard from './_effect-card'
 import ChainmailArmorEffectCard from './chainmail-armor'
 import TargetBlockEffectCard from './target-block'
+import LightningRodEffectCard from './lightning-rod'
 
 /** @type {Array<EffectCard>} */
 const EFFECT_CARDS = [
@@ -38,6 +39,7 @@ const EFFECT_CARDS = [
 	new CommandBlockSingleUseCard(),
 	new ChainmailArmorEffectCard(),
 	new TargetBlockEffectCard(),
+	new LightningRodEffectCard(),
 ]
 
 export default EFFECT_CARDS

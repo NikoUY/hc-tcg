@@ -140,4 +140,5 @@ export const universe = [
 	'chainmail_armor',
 	'hotguy_rare',
 	'target_block',
+	'lightning_rod',
 ]
