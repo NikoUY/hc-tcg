@@ -39,6 +39,7 @@ import PistonSingleUseCard from './piston'
 import SplashPotionOfHealingIISingleUseCard from './splash-potion-of-healing-ii'
 import LadderSingleUseCard from './ladder'
 import FireChargeSingleUseCard from './fire-charge'
+import TargetBlockSingleUseCard from './target-block'
 
 const SINGLE_USE_CARDS = [
 	new InstantHealthSingleUseCard(),
@@ -83,6 +84,7 @@ const SINGLE_USE_CARDS = [
 	new LadderSingleUseCard(),
 	new SplashPotionOfHealingIISingleUseCard(),
 	new FireChargeSingleUseCard(),
+	new TargetBlockSingleUseCard(),
 ]
 
 export default SINGLE_USE_CARDS
