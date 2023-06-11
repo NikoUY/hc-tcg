@@ -17,7 +17,7 @@ class HotguyRareHermitCard extends HermitCard {
 			hermitType: 'explorer',
 			health: 280,
 			primary: {
-				name: "Velocité",
+				name: 'Velocité',
 				cost: ['explorer'],
 				damage: 50,
 				power: null,
@@ -26,7 +26,8 @@ class HotguyRareHermitCard extends HermitCard {
 				name: 'Hawkeye',
 				cost: ['explorer', 'explorer'],
 				damage: 80,
-				power: 'When used with the bow effect card, the bow card does double damage to the chosen AFK opposing Hermit.',
+				power:
+					'When used with the bow effect card, the bow card does double damage to the chosen AFK opposing Hermit.',
 			},
 		})
 	}
@@ -39,9 +40,16 @@ class HotguyRareHermitCard extends HermitCard {
 	 * @param {PickedSlots} pickedSlots
 	 */
 	getAttacks(game, instance, pos, hermitAttackType, pickedSlots) {
-		const attacks = super.getAttacks(game, instance, pos, hermitAttackType, pickedSlots)
+		const attacks = super.getAttacks(
+			game,
+			instance,
+			pos,
+			hermitAttackType,
+			pickedSlots
+		)
 		// Used for the Bow, we need to know the attack type
-		if (attacks[0].type === 'secondary') pos.player.custom[this.getInstanceKey(instance)] = true
+		if (attacks[0].type === 'secondary')
+			pos.player.custom[this.getInstanceKey(instance)] = true
 
 		return attacks
 	}
@@ -55,11 +63,18 @@ class HotguyRareHermitCard extends HermitCard {
 		const {player} = pos
 
 		// How do I avoid using the cardId here?
-		player.hooks.beforeAttack[instance] = (attack, pickedCards) => {
+		player.hooks.beforeAttack[instance] = (attack) => {
 			const singleUseCard = player.board.singleUseCard
-			if (!singleUseCard || singleUseCard.cardId !== 'bow' || !player.custom[this.getInstanceKey(instance)]) return
+			if (
+				!singleUseCard ||
+				singleUseCard.cardId !== 'bow' ||
+				!player.custom[this.getInstanceKey(instance)]
+			)
+				return
 
-			const bowId = SINGLE_USE_CARDS['bow'].getInstanceKey(singleUseCard.cardInstance)
+			const bowId = SINGLE_USE_CARDS['bow'].getInstanceKey(
+				singleUseCard.cardInstance
+			)
 			if (attack.id === bowId) {
 				attack.addDamage(attack.damage)
 			}
