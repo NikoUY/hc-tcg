@@ -141,4 +141,5 @@ export const universe = [
 	'hotguy_rare',
 	'target_block',
 	'lightning_rod',
+	'goatfather_rare',
 ]

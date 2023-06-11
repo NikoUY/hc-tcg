@@ -63,6 +63,7 @@ import ZedaphPlaysRareHermitCard from './zedaphplays-rare'
 import ZombieCleoRareHermitCard from './zombiecleo-rare'
 import HermitCard from './_hermit-card'
 import HotguyRareHermitCard from './hotguy-rare'
+import GoatfatherRareHermitCard from './goatfather-rare'
 
 /** @type {Array<HermitCard>} */
 const HERMIT_CARDS = [
@@ -132,6 +133,7 @@ const HERMIT_CARDS = [
 
 	// new DreamRareHermitCard(),
 	new HotguyRareHermitCard(),
+	new GoatfatherRareHermitCard(),
 ]
 
 export default HERMIT_CARDS
