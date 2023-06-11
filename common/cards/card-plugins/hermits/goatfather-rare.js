@@ -58,21 +58,12 @@ class GoatfatherRareHermitCard extends HermitCard {
 
 		if (coinFlip[0] === 'tails') return attacks
 
-		// Add 30 damage to the active hermit
-		attacks[0].addDamage(30)
-
 		const activeRow = otherPlayer.board.activeRow
 		const rows = otherPlayer.board.rows
-		if (!activeRow || !rowIndex || !row || !row.hermitCard) return attacks
-		const targetIndexes = []
-		for (let i = activeRow + 1; i < rows.length; i++) {
-			if (!rows[i].hermitCard) continue
-			targetIndexes.push(i)
-		}
-
-		// Create attacks for the hermits below the active hermit
-		for (const targetIndex of targetIndexes) {
-			const targetRow = rows[targetIndex]
+		if (activeRow === null || rowIndex === null || !row || !row.hermitCard)
+			return attacks
+		for (let i = activeRow; i < rows.length; i++) {
+			const targetRow = rows[i]
 			if (!targetRow.hermitCard) continue
 
 			const attack = new AttackModel({
@@ -82,13 +73,11 @@ class GoatfatherRareHermitCard extends HermitCard {
 					row: row,
 				},
 				target: {
-					index: targetIndex,
+					index: i,
 					row: targetRow,
 				},
 				type: hermitAttackType,
-			})
-
-			attack.addDamage(10)
+			}).addDamage(activeRow === i ? 30 : 10)
 			attacks.push(attack)
 		}
 
