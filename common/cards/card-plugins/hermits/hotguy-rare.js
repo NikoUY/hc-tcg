@@ -1,7 +1,6 @@
 import HermitCard from './_hermit-card'
 import {GameModel} from '../../../../server/models/game-model'
-import {EFFECT_CARDS} from '../../../../common/cards'
-
+import {SINGLE_USE_CARDS} from '../../../../common/cards'
 
 /**
  * @typedef {import('common/types/cards').CardPos} CardPos
@@ -27,8 +26,7 @@ class HotguyRareHermitCard extends HermitCard {
 				name: 'Hawkeye',
 				cost: ['explorer', 'explorer'],
 				damage: 80,
-				power:
-					'When used with the bow effect card, the bow card does double damage to the chosen AFK opposing Hermit.',
+				power: 'When used with the bow effect card, the bow card does double damage to the chosen AFK opposing Hermit.',
 			},
 		})
 	}
@@ -41,9 +39,9 @@ class HotguyRareHermitCard extends HermitCard {
 	 * @param {PickedSlots} pickedSlots
 	 */
 	getAttacks(game, instance, pos, hermitAttackType, pickedSlots) {
-        const attacks = super.getAttacks(game, instance, pos, hermitAttackType, pickedSlots)
-        // Used for the Bow, we need to know the attack type
-        if (attacks[0].type === 'secondary') pos.player.custom[this.getInstanceKey(instance)] = true
+		const attacks = super.getAttacks(game, instance, pos, hermitAttackType, pickedSlots)
+		// Used for the Bow, we need to know the attack type
+		if (attacks[0].type === 'secondary') pos.player.custom[this.getInstanceKey(instance)] = true
 
 		return attacks
 	}
@@ -55,17 +53,17 @@ class HotguyRareHermitCard extends HermitCard {
 	 */
 	onAttach(game, instance, pos) {
 		const {player} = pos
-        
-        player.hooks.onAttack[instance] = (attack, pickedCards) => {
-            const singleUseCard = player.board.singleUseCard
-            if (!singleUseCard || !player.custom[this.getInstanceKey(instance)]) return
 
-            // How do I avoid using the cardId here?
-            const bowId = EFFECT_CARDS['bow'].getInstanceKey(singleUseCard.cardInstance)
-            if (attack.id === bowId) {
-                attack.addDamage(attack.damage)
-            }
-        }
+		// How do I avoid using the cardId here?
+		player.hooks.beforeAttack[instance] = (attack, pickedCards) => {
+			const singleUseCard = player.board.singleUseCard
+			if (!singleUseCard || singleUseCard.cardId !== 'bow' || !player.custom[this.getInstanceKey(instance)]) return
+
+			const bowId = SINGLE_USE_CARDS['bow'].getInstanceKey(singleUseCard.cardInstance)
+			if (attack.id === bowId) {
+				attack.addDamage(attack.damage)
+			}
+		}
 	}
 
 	/**
@@ -80,7 +78,7 @@ class HotguyRareHermitCard extends HermitCard {
 		delete player.custom[this.getInstanceKey(instance)]
 	}
 
-    getExpansion() {
+	getExpansion() {
 		return 'alter_egos'
 	}
 
