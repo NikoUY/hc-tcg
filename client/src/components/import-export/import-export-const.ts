@@ -139,4 +139,5 @@ export const universe = [
 	'fire_charge',
 	'chainmail_armor',
 	'hotguy_rare',
+	'target_block',
 ]
