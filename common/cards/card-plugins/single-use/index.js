@@ -71,7 +71,7 @@ const SINGLE_USE_CARDS = [
 	new CurseOfBindingSingleUseCard(),
 	new CurseOfVanishingSingleUseCard(),
 
-	// new AnvilSingleUseCard(),
+	new AnvilSingleUseCard(),
 	// new PotionOfSlownessSingleUseCard(),
 	// new PotionOfWeaknessSingleUseCard(),
 	new TridentSingleUseCard(),
