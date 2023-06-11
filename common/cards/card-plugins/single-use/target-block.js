@@ -5,6 +5,7 @@ import SingleUseCard from './_single-use-card'
 /**
  * @typedef {import('common/types/cards').CardPos} CardPos
  * @typedef {import('common/types/pick-process').PickRequirmentT} PickRequirmentT
+ * @typedef {import('common/types/pick-process').PickedSlots} PickedSlots
  */
 
 class TargetBlockSingleUseCard extends SingleUseCard {
@@ -15,7 +16,7 @@ class TargetBlockSingleUseCard extends SingleUseCard {
 			rarity: 'rare',
 			description:
 				"Choose one of your opponent's AFK Hermits to take all damage done during this turn.",
-			pickOn: 'attack',
+			pickOn: 'apply',
 			pickReqs: /** @satisfies {Array<PickRequirmentT>} */ ([
 				{target: 'opponent', type: ['hermit'], amount: 1, active: false},
 			]),
@@ -26,22 +27,20 @@ class TargetBlockSingleUseCard extends SingleUseCard {
 		return true
 	}
 
-	canApply() {
-		return true
-	}
-
 	/**
 	 * @param {GameModel} game
 	 * @param {string} instance
 	 * @param {CardPos} pos
+	 * @param {PickedSlots} pickedSlots
 	 */
-	onApply(game, instance, pos) {
-		const {player, row, rowIndex} = pos
+	onApply(game, instance, pos, pickedSlots) {
+		const {player} = pos
+		const pickedSlot = pickedSlots[this.id][0]
 
-		player.hooks.beforeAttack[instance] = (attack, pickedSlots) => {
-			if (!row || rowIndex === null || !row.hermitCard) return
-			attack.target.index = rowIndex
-			attack.target.row = row
+		player.hooks.beforeAttack[instance] = (attack) => {
+			if (!pickedSlot.row || !pickedSlot.row.state.hermitCard) return
+			attack.target.index = pickedSlot.row.index
+			attack.target.row = pickedSlot.row.state
 		}
 	}
 
@@ -50,18 +49,13 @@ class TargetBlockSingleUseCard extends SingleUseCard {
 	 * @param {CardPos} pos
 	 */
 	canAttach(game, pos) {
-		console.log('test')
 		if (super.canAttach(game, pos) === 'INVALID') return 'INVALID'
-		console.log('test2')
 		const {otherPlayer} = pos
 
-		console.log('test3')
 		// Inactive Hermits
 		if (getNonEmptyRows(otherPlayer, false).length === 0) return 'NO'
-		console.log('test4')
-		// Can be used if a Lighning Rod is active
+		// Can't be used if a Lighning Rod is on that player's board
 		if (getHasRedirectingCards(otherPlayer)) return 'NO'
-		console.log('test5')
 
 		return 'YES'
 	}
