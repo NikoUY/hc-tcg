@@ -30,7 +30,6 @@ class LightningRodEffectCard extends EffectCard {
 		const {currentPlayerId} = game.ds
 		const {player} = pos
 
-		console.log(pos)
 		if (pos.slot.type !== 'effect') return 'INVALID'
 		if (pos.playerId !== currentPlayerId) return 'INVALID'
 
@@ -48,7 +47,7 @@ class LightningRodEffectCard extends EffectCard {
 	 */
 	onAttach(game, instance, pos) {
 		const {otherPlayer, row, rowIndex} = pos
-		otherPlayer.hooks.beforeAttack[instance] = (attack, pickedSlots) => {
+		otherPlayer.hooks.beforeAttack[instance] = (attack) => {
 			if (!row || rowIndex === null || !row.hermitCard) return
 			attack.target.index = rowIndex
 			attack.target.row = row
@@ -68,6 +67,10 @@ class LightningRodEffectCard extends EffectCard {
 		const {otherPlayer} = pos
 		delete otherPlayer.hooks.beforeAttack[instance]
 		delete otherPlayer.hooks.afterAttack[instance]
+	}
+
+	getExpansion() {
+		return 'alter_egos'
 	}
 }
 
