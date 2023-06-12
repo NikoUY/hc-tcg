@@ -14,12 +14,13 @@ class LadderSingleUseCard extends SingleUseCard {
 			name: 'Ladder',
 			rarity: 'ultra_rare',
 			description:
-				"Before attacking swap your active Hermit card with one of your adjacent AFK Hermits.\n\nAll cards attached to both Hermits, including health, remain in place.\n\nActive and AFK status does not change.",
+				'Before attacking swap your active Hermit card with one of your adjacent AFK Hermits.\n\nAll cards attached to both Hermits, including health, remain in place.\n\nActive and AFK status does not change.',
+
+			pickOn: 'apply',
+			pickReqs: /** @satisfies {Array<PickRequirmentT>} */ ([
+				{target: 'player', type: ['hermit'], amount: 1, adjacent: 'active'},
+			]),
 		})
-		this.pickOn = 'apply'
-		this.pickReqs = /** @satisfies {Array<PickRequirmentT>} */ ([
-			{target: 'player', type: ['hermit'], amount: 1, adjacent: 'active'},
-		])
 	}
 
 	/**
@@ -31,41 +32,44 @@ class LadderSingleUseCard extends SingleUseCard {
 	onApply(game, instance, pos, pickedSlots) {
 		const slots = pickedSlots[this.id] || []
 		const activeRowIndex = pos.player.board.activeRow
-		
-        if (slots.length !== 1 || activeRowIndex === null) return
 
-		const playerActiveRow =pos.player.board.rows[activeRowIndex]
+		if (slots.length !== 1 || activeRowIndex === null) return
 
-        const activeHermitCard = playerActiveRow?.hermitCard
-        const inactiveHermitCardInfo = slots[0]
-        const inactiveHermitCard = inactiveHermitCardInfo.slot.card
+		const playerActiveRow = pos.player.board.rows[activeRowIndex]
+
+		const activeHermitCard = playerActiveRow?.hermitCard
+		const inactiveHermitCardInfo = slots[0]
+		const inactiveHermitCard = inactiveHermitCardInfo.slot.card
 
 		if (inactiveHermitCard === null || !inactiveHermitCardInfo.row) return
-        playerActiveRow.hermitCard = inactiveHermitCard
-        inactiveHermitCardInfo.row.state.hermitCard = activeHermitCard
+		playerActiveRow.hermitCard = inactiveHermitCard
+		inactiveHermitCardInfo.row.state.hermitCard = activeHermitCard
 	}
-	
-    /**
+
+	/**
 	 * @param {GameModel} game
 	 * @param {CardPos} pos
 	 */
 	canAttach(game, pos) {
 		if (super.canAttach(game, pos) === 'INVALID') return 'INVALID'
 
-        const playerBoard = pos.player.board
-        const activeRowIndex = playerBoard.activeRow
-        if (activeRowIndex === null) return 'NO'
+		const playerBoard = pos.player.board
+		const activeRowIndex = playerBoard.activeRow
+		if (activeRowIndex === null) return 'NO'
 
-        const adjacentRowsIndex = [
-			activeRowIndex - 1, 
-			activeRowIndex + 1
-		].filter((index) => index >= 0 && index < playerBoard.rows.length)
-        for (const index of adjacentRowsIndex) {
-            const row = playerBoard.rows[index]
-            if (row.hermitCard !== null) return 'YES'
-        }
-        
+		const adjacentRowsIndex = [activeRowIndex - 1, activeRowIndex + 1].filter(
+			(index) => index >= 0 && index < playerBoard.rows.length
+		)
+		for (const index of adjacentRowsIndex) {
+			const row = playerBoard.rows[index]
+			if (row.hermitCard !== null) return 'YES'
+		}
+
 		return 'NO'
+	}
+
+	getExpansion() {
+		return 'alter_egos'
 	}
 }
 
