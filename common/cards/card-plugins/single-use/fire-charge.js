@@ -1,4 +1,9 @@
-import {discardCard, discardSingleUse, rowHasItem, isRemovable} from '../../../../server/utils'
+import {
+	discardCard,
+	discardSingleUse,
+	rowHasItem,
+	isRemovable,
+} from '../../../../server/utils'
 import SingleUseCard from './_single-use-card'
 import {GameModel} from '../../../../server/models/game-model'
 
@@ -15,12 +20,12 @@ class FireChargeSingleUseCard extends SingleUseCard {
 			name: 'Fire Charge',
 			rarity: 'common',
 			description:
-				"Discard 1 attached item or effect card from your active or AFK Hermit.\n\nYou can use another single use effect card this turn.",
-	
+				'Discard 1 attached item or effect card from your active or AFK Hermit.\n\nYou can use another single use effect card this turn.',
+
 			pickOn: 'apply',
 			pickReqs: /** @satisfies {Array<PickRequirmentT>} */ ([
 				{target: 'player', type: ['item', 'effect'], amount: 1},
-			])
+			]),
 		})
 	}
 
@@ -34,18 +39,18 @@ class FireChargeSingleUseCard extends SingleUseCard {
 		const slots = pickedSlots[this.id] || []
 		const {player} = pos
 
-        if (slots.length !== 1) return
+		if (slots.length !== 1) return
 
-        const pickedCard = slots[0]
+		const pickedCard = slots[0]
 		if (pickedCard.slot.card === null) return
 
-        discardCard(game, pickedCard.slot.card)
+		discardCard(game, pickedCard.slot.card)
 		discardSingleUse(game, player)
 
-        player.custom[this.getInstanceKey(instance)] = true
+		player.custom[this.getInstanceKey(instance)] = true
 	}
-	
-    /**
+
+	/**
 	 * @param {GameModel} game
 	 * @param {CardPos} pos
 	 * @returns {"YES" | "NO" | "INVALID"}
@@ -54,9 +59,13 @@ class FireChargeSingleUseCard extends SingleUseCard {
 		if (super.canAttach(game, pos) === 'INVALID') return 'INVALID'
 		const {player} = pos
 
-        for (const row of player.board.rows) {
-           if ((row.effectCard !== null && isRemovable(row.effectCard)) || rowHasItem(row)) return 'YES'
-        }
+		for (const row of player.board.rows) {
+			if (
+				(row.effectCard !== null && isRemovable(row.effectCard)) ||
+				rowHasItem(row)
+			)
+				return 'YES'
+		}
 
 		return 'NO'
 	}
@@ -73,12 +82,15 @@ class FireChargeSingleUseCard extends SingleUseCard {
 			// e.g. if you play a card that allows you to play another single use card like multiple Pistons back to back
 			if (!availableActions.includes('PLAY_SINGLE_USE_CARD')) {
 				availableActions.push('PLAY_SINGLE_USE_CARD')
-			} 
+			}
 			return availableActions
 		}
 
 		player.hooks.onApply[instance] = (instance) => {
-			if (player.custom[this.getInstanceKey(instance)] && player.board.singleUseCardUsed) {
+			if (
+				player.custom[this.getInstanceKey(instance)] &&
+				player.board.singleUseCardUsed
+			) {
 				delete player.hooks.availableActions[instance]
 				delete player.custom[this.getInstanceKey(instance)]
 			}
@@ -91,6 +103,10 @@ class FireChargeSingleUseCard extends SingleUseCard {
 			delete player.hooks.availableActions[instance]
 			delete player.custom[this.getInstanceKey(instance)]
 		}
+	}
+
+	getExpansion() {
+		return 'alter_egos'
 	}
 }
 
