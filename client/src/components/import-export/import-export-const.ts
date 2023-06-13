@@ -142,4 +142,5 @@ export const universe = [
 	'lightning_rod',
 	'goatfather_rare',
 	'anvil',
+	'string',
 ]

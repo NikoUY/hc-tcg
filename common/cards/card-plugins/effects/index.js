@@ -33,7 +33,7 @@ const EFFECT_CARDS = [
 	new ThornsEffectCard(),
 	new MendingEffectCard(),
 	new LoyaltyEffectCard(),
-	// new StringEffectCard(),
+	new StringEffectCard(),
 	// new TurtleShellEffectCard(),
 	new CommandBlockSingleUseCard(),
 	new ChainmailArmorEffectCard(),
