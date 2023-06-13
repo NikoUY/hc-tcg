@@ -28,16 +28,12 @@ class CommandBlockEffectCard extends EffectCard {
 		const {player} = pos
 
 		// Used to know if the hermit has attacked this turn
-		player.custom[this.getInstanceKey(instance, 'attacked')] = false
-		// Used to know if the the row this card is attached to is the active row
-		player.custom[this.getInstanceKey(instance, 'rowIndex')] =
-			player.board.activeRow
+		player.custom[this.getInstanceKey(instance)] = false
 
 		player.hooks.availableActions[instance] = (availableActions) => {
-			const attacked = player.custom[this.getInstanceKey(instance, 'attacked')]
-			const rowIndex = player.custom[this.getInstanceKey(instance, 'rowIndex')]
+			const attacked = player.custom[this.getInstanceKey(instance)]
 
-			if (attacked || player.board.activeRow !== rowIndex)
+			if (attacked || player.board.activeRow !== pos.rowIndex)
 				return availableActions
 
 			const {activeRow, rows} = player.board
@@ -80,11 +76,11 @@ class CommandBlockEffectCard extends EffectCard {
 		}
 
 		player.hooks.afterAttack[instance] = (attackResult) => {
-			player.custom[this.getInstanceKey(instance, 'attacked')] = true
+			player.custom[this.getInstanceKey(instance)] = true
 		}
 
 		player.hooks.turnStart[instance] = () => {
-			player.custom[this.getInstanceKey(instance, 'attacked')] = false
+			player.custom[this.getInstanceKey(instance)] = false
 		}
 	}
 
