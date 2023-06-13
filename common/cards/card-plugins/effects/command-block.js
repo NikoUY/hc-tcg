@@ -1,6 +1,7 @@
 import EffectCard from './_effect-card'
 import {GameModel} from '../../../../server/models/game-model'
 import {HERMIT_CARDS} from '../../../../common/cards'
+import {hasEnoughItems} from '../../../../server/utils'
 
 /**
  * @typedef {import('common/types/pick-process').PickedSlots} PickedSlots
@@ -26,11 +27,18 @@ class CommandBlockEffectCard extends EffectCard {
 	onAttach(game, instance, pos) {
 		const {player} = pos
 
-		// Used to know when to ignore available actions hook
-		player.custom[this.getInstanceKey(instance)] = true
+		// Used to know if the hermit has attacked this turn
+		player.custom[this.getInstanceKey(instance, 'attacked')] = false
+		// Used to know if the the row this card is attached to is the active row
+		player.custom[this.getInstanceKey(instance, 'rowIndex')] =
+			player.board.activeRow
 
 		player.hooks.availableActions[instance] = (availableActions) => {
-			if (!player.custom[this.getInstanceKey(instance)]) return availableActions
+			const attacked = player.custom[this.getInstanceKey(instance, 'attacked')]
+			const rowIndex = player.custom[this.getInstanceKey(instance, 'rowIndex')]
+
+			if (attacked || player.board.activeRow !== rowIndex)
+				return availableActions
 
 			const {activeRow, rows} = player.board
 			if (activeRow === null || !rows[activeRow]) return availableActions
@@ -41,19 +49,29 @@ class CommandBlockEffectCard extends EffectCard {
 			const ailments = rows[activeRow].ailments
 			const isSleeping = ailments.find((a) => a.id === 'sleeping')
 			const isSlow = ailments.find((a) => a.id === 'slowness')
-			const itemCards = rows[activeRow].itemCards
 			const hermitInfo = HERMIT_CARDS[hermitCard.cardId]
-			const primaryHasEnoughItems =
-				itemCards.length >= hermitInfo.primary.cost.length
-			const secondaryHasEnoughItems =
-				itemCards.length >= hermitInfo.secondary.cost.length
+			const primaryHasEnoughItems = hasEnoughItems(
+				rows[activeRow].itemCards.filter(Boolean),
+				hermitInfo.primary.cost.map(() => 'any')
+			)
+			const secondaryHasEnoughItems = hasEnoughItems(
+				rows[activeRow].itemCards.filter(Boolean),
+				hermitInfo.secondary.cost.map(() => 'any')
+			)
 
 			if (!isSleeping) {
-				if (primaryHasEnoughItems) {
+				if (
+					primaryHasEnoughItems &&
+					!availableActions.includes('PRIMARY_ATTACK')
+				) {
 					availableActions.push('PRIMARY_ATTACK')
 				}
 
-				if (!isSlow && secondaryHasEnoughItems) {
+				if (
+					!isSlow &&
+					secondaryHasEnoughItems &&
+					!availableActions.includes('SECONDARY_ATTACK')
+				) {
 					availableActions.push('SECONDARY_ATTACK')
 				}
 			}
@@ -62,20 +80,21 @@ class CommandBlockEffectCard extends EffectCard {
 		}
 
 		player.hooks.afterAttack[instance] = (attackResult) => {
-			player.custom[this.getInstanceKey(instance)] = false
+			player.custom[this.getInstanceKey(instance, 'attacked')] = true
 		}
 
 		player.hooks.turnStart[instance] = () => {
-			player.custom[this.getInstanceKey(instance)] = true
+			player.custom[this.getInstanceKey(instance, 'attacked')] = false
 		}
 	}
 
 	onDetach(game, instance, pos) {
 		const {player} = pos
-		delete player.custom[this.getInstanceKey(instance)]
 		delete player.hooks.availableActions[instance]
 		delete player.hooks.afterAttack[instance]
 		delete player.hooks.turnStart[instance]
+		delete player.custom[this.getInstanceKey(instance, 'attacked')]
+		delete player.custom[this.getInstanceKey(instance, 'rowIndex')]
 	}
 
 	/**
