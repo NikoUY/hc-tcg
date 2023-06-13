@@ -17,11 +17,7 @@ class LightningRodEffectCard extends EffectCard {
 				"Attach to any of your active or AFK Hermits.\n\n All damage done to you on your opponent's next turn is taken by the Hermit this card is attached to.\n\nDiscard after damage is taken.",
 		})
 	}
-
-	getIsRedirecting() {
-		return true
-	}
-
+	
 	/**
 	 * @param {GameModel} game
 	 * @param {CardPos} pos
@@ -34,8 +30,6 @@ class LightningRodEffectCard extends EffectCard {
 		if (pos.playerId !== currentPlayerId) return 'INVALID'
 
 		if (!pos.row?.hermitCard) return 'NO'
-		// Restrict to one per side
-		if (getHasRedirectingCards(player)) return 'NO'
 
 		return 'YES'
 	}
@@ -54,6 +48,7 @@ class LightningRodEffectCard extends EffectCard {
 		}
 
 		otherPlayer.hooks.afterAttack[instance] = (attackResult) => {
+			if (attackResult.attack.target.index !== rowIndex) return
 			discardCard(game, getCardAtPos(game, pos))
 		}
 	}

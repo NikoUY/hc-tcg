@@ -17,14 +17,10 @@ class TargetBlockSingleUseCard extends SingleUseCard {
 			description:
 				"Choose one of your opponent's AFK Hermits to take all damage done during this turn.",
 			pickOn: 'apply',
-			pickReqs: /** @satisfies {Array<PickRequirmentT>} */ ([
+			pickReqs: [
 				{target: 'opponent', type: ['hermit'], amount: 1, active: false},
-			]),
+			],
 		})
-	}
-
-	getIsRedirecting() {
-		return true
 	}
 
 	/**
@@ -54,8 +50,6 @@ class TargetBlockSingleUseCard extends SingleUseCard {
 
 		// Inactive Hermits
 		if (getNonEmptyRows(otherPlayer, false).length === 0) return 'NO'
-		// Can't be used if a Lighning Rod is on that player's board
-		if (getHasRedirectingCards(otherPlayer)) return 'NO'
 
 		return 'YES'
 	}
