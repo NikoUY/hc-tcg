@@ -401,14 +401,16 @@ function* turnActionsSaga(game, pastTurnActions, turnConfig) {
 				blockedActions = blockedHooks[i](blockedActions)
 			}
 
-			// Get available actions, while filtering out blocked actions
+			// Get available actions
 			const availableHooks = Object.values(currentPlayer.hooks.availableActions)
 			for (let i = 0; i < availableHooks.length; i++) {
-				const newActions = availableHooks[i](availableActions)
-				availableActions = newActions.filter(
-					(action) => !blockedActions.includes(action)
-				)
+				availableActions = availableHooks[i](availableActions)
 			}
+
+			// Filter blocked actions
+			availableActions = availableActions.filter(
+				(action) => !blockedActions.includes(action)
+			)
 
 			// End of available actions code
 
