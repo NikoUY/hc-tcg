@@ -24,33 +24,34 @@ export function equalCard(card1, card2) {
 	)
 }
 
-export function hasEnoughItems(itemCards, cost) {
-	const itemCardIds = itemCards.map((card) => card.cardId)
-	// transform item cards into cost
-	// ['eye_of_ender_2x', 'oak_stairs'] -> ['speedrunner', 'speedrunner', 'builder']
-	const energy = itemCardIds.reduce((result, cardId) => {
-		const itemCard = ITEM_CARDS[cardId]
-		if (!itemCard) return result
-		result.push(itemCard.hermitType)
-		// all rare item cards are x2
-		if (itemCard.rarity === 'rare') {
-			result.push(itemCard.hermitType)
-		}
-		return result
-	}, [])
+/**
+ *
+ * @param {Array<import('types/cards').EnergyT>} energy
+ * @param {Array<import('types/cards').EnergyT>} cost
+ * @returns
+ */
+export function hasEnoughEnergy(energy, cost) {
+	const remainingEnergy = energy.slice()
 
 	const specificCost = cost.filter((item) => item !== 'any')
 	const anyCost = cost.filter((item) => item === 'any')
 	const hasEnoughSpecific = specificCost.every((costItem) => {
-		const index = energy.findIndex((energyItem) => energyItem === costItem)
-		if (index === -1) return false
-		energy.splice(index, 1)
+		// First try find the exact card
+		let index = remainingEnergy.findIndex(
+			(energyItem) => energyItem === costItem
+		)
+		if (index === -1) {
+			// Then try find an "any" card
+			index = remainingEnergy.findIndex((energyItem) => energyItem === 'any')
+			if (index === -1) return
+		}
+		remainingEnergy.splice(index, 1)
 		return true
 	})
 	if (!hasEnoughSpecific) return false
 
 	// check if remaining energy is enough to cover required "any" cost
-	return energy.length >= anyCost.length
+	return remainingEnergy.length >= anyCost.length
 }
 
 /**
@@ -262,42 +263,11 @@ export const isRemovable = (card) => {
 }
 
 /**
- * @param {CardT} card
- */
-export const isRedirecting = (card) => {
-	const cardInfo = CARDS[card.cardId]
-	if (!cardInfo) return false
-	return cardInfo.getIsRedirecting()
-}
-
-/**
  * @param {PlayerState} playerState
  * @returns {boolean}
  */
 export function isActive(playerState) {
 	return playerState.board.activeRow !== null
-}
-
-/**
- * @param {PlayerState} playerState
- * @returns {boolean}
- */
-export function getHasRedirectingCards(playerState) {
-	for (const row of playerState.board.rows) {
-		if (row.effectCard && isRedirecting(row.effectCard)) return true
-	}
-	return false
-}
-
-/**
- * @param {PlayerState} playerState
- * @return {RowStateWithHermit | null}
- */
-export function getRowWithRedirectingCard(playerState) {
-	for (const row of playerState.board.rows) {
-		if (row.effectCard && isRedirecting(row.effectCard)) return row
-	}
-	return null
 }
 
 /**
