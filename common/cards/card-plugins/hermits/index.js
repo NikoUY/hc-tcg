@@ -61,6 +61,7 @@ import XBCraftedRareHermitCard from './xbcrafted-rare'
 import XisumavoidRareHermitCard from './xisumavoid-rare'
 import ZedaphPlaysRareHermitCard from './zedaphplays-rare'
 import ZombieCleoRareHermitCard from './zombiecleo-rare'
+import JinglerRareHermitCard from './jingler-rare'
 import HermitCard from './_hermit-card'
 
 /** @type {Array<HermitCard>} */
@@ -130,6 +131,7 @@ const HERMIT_CARDS = [
 	// new PotatoBoyRareHermitCard(),
 
 	// new DreamRareHermitCard(),
+	new JinglerRareHermitCard(),
 ]
 
 export default HERMIT_CARDS
