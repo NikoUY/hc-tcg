@@ -1,11 +1,12 @@
 import HermitCard from './_hermit-card'
-import {discardCard, flipCoin} from '../../../utils'
+import {discardCard, flipCoin} from '../../../../server/utils'
+import {GameModel} from '../../../../server/models/game-model'
 
 /**
- * @typedef {import('types/cards').CardPos} CardPos
+ * @typedef {import('common/types/cards').CardPos} CardPos
  */
 
-class JinglerHermitCard extends HermitCard {
+class JinglerRareHermitCard extends HermitCard {
 	constructor() {
 		super({
 			id: 'jingler_rare',
@@ -47,7 +48,7 @@ class JinglerHermitCard extends HermitCard {
 		const {player, otherPlayer} = pos
 
 		player.hooks.afterAttack[instance] = (attackResult) => {
-			if (attackResult.attack.id !== this.id) return
+			if (attackResult.attack.id !== this.getInstanceKey(instance)) return
 			const coinFlip = flipCoin(player)
 			player.coinFlips[this.id] = coinFlip
 			if (coinFlip[0] === 'tails') return
@@ -59,7 +60,9 @@ class JinglerHermitCard extends HermitCard {
 				const slots = pickedSlots[this.id]
 				if (!slots || slots.length !== 1) return
 
-				discardCard(game, slots[0].card)
+				discardCard(game, slots[0].slot.card)
+
+				otherPlayer.followUp = null
 
 				// We can't delete on onDetach because the hermit can die from
 				// a backlash attack and the followUp will trigger after onDetach
@@ -72,6 +75,8 @@ class JinglerHermitCard extends HermitCard {
 
 				// Discard the first card in the opponent's hand
 				discardCard(game, otherPlayer.hand[0])
+
+				otherPlayer.followUp = null
 
 				delete otherPlayer.hooks.onFollowUp[instance]
 				delete otherPlayer.hooks.onFollowUpTimeout[instance]
@@ -102,4 +107,4 @@ class JinglerHermitCard extends HermitCard {
 	}
 }
 
-export default JinglerHermitCard
+export default JinglerRareHermitCard
