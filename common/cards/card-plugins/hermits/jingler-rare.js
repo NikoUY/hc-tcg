@@ -88,6 +88,18 @@ class JinglerHermitCard extends HermitCard {
 		const {player} = pos
 		delete player.hooks.afterAttack[instance]
 	}
+
+	getExpansion() {
+		return 'alter_egos'
+	}
+
+	getPalette() {
+		return 'alter_egos'
+	}
+
+	getBackground() {
+		return 'alter_egos_background'
+	}
 }
 
 export default JinglerHermitCard
