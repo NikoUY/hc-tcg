@@ -74,9 +74,16 @@ class GeminiTayRareHermitCard extends HermitCard {
 		}
 
 		player.hooks.onApply[instance] = (instance) => {
-			// delete flag after single use is applied
-			if (player.custom[extraCardKey]) {
-				delete player.custom[extraCardKey]
+			// This is a workaround for Fire Charge/Piston, they need to get discarded
+			// after they are used which allows you to use another single use card,
+			// the issue is that Gem won't be able to attack because extraCardKey would be
+			// removed before the Fire Charge/Piston is applied so we need to make sure
+			// this code is run last.
+			player.hooks.onApply[instance] = (instance) => {
+				// delete flag after single use is applied
+				if (player.custom[extraCardKey]) {
+					delete player.custom[extraCardKey]
+				}
 			}
 		}
 
