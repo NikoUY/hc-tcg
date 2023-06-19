@@ -79,10 +79,8 @@ class PistonSingleUseCard extends SingleUseCard {
 
 		swapSlots(game, itemPos, targetPos)
 
-		// Undo applySingleUse
-		player.board.singleUseCardUsed = false
-
-		player.custom[this.getInstanceKey(instance)] = true
+		player.custom[this.getInstanceKey(instance, 'checkUsed')] = true
+		player.custom[this.getInstanceKey(instance, 'discard')] = true
 	}
 
 	/**
@@ -115,6 +113,9 @@ class PistonSingleUseCard extends SingleUseCard {
 	onAttach(game, instance, pos) {
 		const {player} = pos
 
+		const checkKey = this.getInstanceKey(instance, 'checkUsed')
+		const discardKey = this.getInstanceKey(instance, 'discard')
+
 		player.hooks.availableActions[instance] = (availableActions) => {
 			// We have to check if PLAY_SINGLE_USE_CARD is already there because it's possible that another card added it
 			// e.g. if you play a card that allows you to play another single use card like multiple Pistons back to back
@@ -125,13 +126,23 @@ class PistonSingleUseCard extends SingleUseCard {
 		}
 
 		player.hooks.onApply[instance] = (instance) => {
-			if (player.custom[this.getInstanceKey(instance)]) {
+			if (player.custom[checkKey] && !player.custom[discardKey]) {
 				if (player.board.singleUseCardUsed) {
 					delete player.hooks.availableActions[instance]
-					delete player.custom[this.getInstanceKey(instance)]
-				} else if (player.board.singleUseCard) {
-					discardSingleUse(game, player)
+					delete player.custom[this.getInstanceKey(instance, 'checkUsed')]
 				}
+			}
+
+			if (player.custom[discardKey]) {
+				// It may have been stolen by helskinght so we have to check if it's still there
+				if (player.board.singleUseCard) {
+					discardSingleUse(game, player)
+				} else {
+					// If it was stolen then we need to reset the flag so that the player
+					// can play another single use card
+					player.board.singleUseCardUsed = false
+				}
+				delete player.custom[discardKey]
 			}
 		}
 
@@ -140,7 +151,9 @@ class PistonSingleUseCard extends SingleUseCard {
 		player.hooks.onTurnEnd[instance] = () => {
 			delete player.hooks.onTurnEnd[instance]
 			delete player.hooks.availableActions[instance]
-			delete player.custom[this.getInstanceKey(instance)]
+			delete player.hooks.onApply[instance]
+			delete player.custom[this.getInstanceKey(instance, 'checkUsed')]
+			delete player.custom[this.getInstanceKey(instance, 'discard')]
 		}
 	}
 
